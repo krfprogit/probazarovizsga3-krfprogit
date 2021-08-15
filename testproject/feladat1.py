@@ -2,17 +2,26 @@ from selenium import webdriver
 import time
 
 
-def input_kitolt(a, b):
+# törli majd kitölti az adott mezőt, végén gombra kattint
+def input_kitolt(input_a, input_b):
     oldal_a_input.clear()
-    oldal_a_input.send_keys(a)
+    oldal_a_input.send_keys(input_a)
     oldal_b_input.clear()
-    oldal_b_input.send_keys(b)
+    oldal_b_input.send_keys(input_b)
     kalkulacio_btn_input.click()
 
 
+# számolás eredményét adja vissza
 def kalkulacio():
     eredmeny = browser.find_element_by_id('result').text
     return eredmeny
+
+
+# mindent meghív, majd ellenőriz
+def ellenorzes(input_a, input_b, result):
+    input_kitolt(input_a, input_b)
+    kalkulacio_eredmeny = kalkulacio()
+    assert kalkulacio_eredmeny == result
 
 
 PATH = "C:\\Windows\\chromedriver.exe"
@@ -27,21 +36,9 @@ oldal_a_input = browser.find_element_by_id('a')
 oldal_b_input = browser.find_element_by_id('b')
 kalkulacio_btn_input = browser.find_element_by_id('submit')
 
-# input mezők kitöltése_1
-input_kitolt(99, 12)
-# eredmény kiolvasása_1
-kalkulacio_eredmeny = kalkulacio()
-# ellenőrzés_1
-assert kalkulacio_eredmeny == "222"
-
-# kalkuláció_2
-input_kitolt("kiskutya", 12)
-kalkulacio_eredmeny = kalkulacio()
-assert kalkulacio_eredmeny == 'NaN'
-
-# kalkuláció_3
-input_kitolt('', '')
-kalkulacio_eredmeny = kalkulacio()
-assert kalkulacio_eredmeny == 'NaN'
+# ellenőrzések
+ellenorzes(99, 12, "222")
+ellenorzes("kiskutya", 12, 'NaN')
+ellenorzes('', "", 'NaN')
 
 browser.quit()
