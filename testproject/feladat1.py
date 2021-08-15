@@ -1,6 +1,20 @@
 from selenium import webdriver
 import time
 
+
+def input_kitolt(a, b):
+    oldal_a_input.clear()
+    oldal_a_input.send_keys(a)
+    oldal_b_input.clear()
+    oldal_b_input.send_keys(b)
+    kalkulacio_btn_input.click()
+
+
+def kalkulacio():
+    eredmeny = browser.find_element_by_id('result').text
+    return eredmeny
+
+
 PATH = "C:\\Windows\\chromedriver.exe"
 browser = webdriver.Chrome(PATH)
 
@@ -13,15 +27,21 @@ oldal_a_input = browser.find_element_by_id('a')
 oldal_b_input = browser.find_element_by_id('b')
 kalkulacio_btn_input = browser.find_element_by_id('submit')
 
-# input mezők kitöltése
-oldal_a_input.send_keys('99')
-oldal_b_input.send_keys('12')
-kalkulacio_btn_input.click()
+# input mezők kitöltése_1
+input_kitolt(99, 12)
+# eredmény kiolvasása_1
+kalkulacio_eredmeny = kalkulacio()
+# ellenőrzés_1
+assert kalkulacio_eredmeny == "222"
 
-# eredmény kiolvasása
-kalkulacio_eredmeny = int(browser.find_element_by_id('result').text)
+# kalkuláció_2
+input_kitolt("kiskutya", 12)
+kalkulacio_eredmeny = kalkulacio()
+assert kalkulacio_eredmeny == 'NaN'
 
-# ellenőrzés
-assert kalkulacio_eredmeny == 222
+# kalkuláció_3
+input_kitolt('', '')
+kalkulacio_eredmeny = kalkulacio()
+assert kalkulacio_eredmeny == 'NaN'
 
 browser.quit()
